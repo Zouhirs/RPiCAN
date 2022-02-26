@@ -16,7 +16,7 @@ The Raspberry Pi does not have a CAN interface, so it does know how to communica
 To use CAN protocol on the Raspberry Pi, we can take advantage of the SPI interface with the help of the MCP2515. This circuit converts SPI to CAN (CANTx and CANRx).
 The HW-184 module contains an MCP2515 chip alongside a CAN transceiver, so it takes as an input an SPI frame and converts it to a CAN frame in differential signal (Or the other way around).
 However, the transceiver chip in this module must be powered up with 5v to work, and its Vcc is connected to the Vcc of the MCP2515 chip, which both are connected to the Vcc of the whole module. Knowing that the Raspberry Pi's GPIOs have a maximum voltage support of 3.3v, connecting it to the 5v module HW-184 will fry it. Thus we can not use the module as it is. The two power pins of the two chips need to be disconnected, and the MCP2515 should be powered with a 3v3 voltage, while keeping the transceiver voltage at 5v as it does not connect with the Raspberry Pi, and it interpretates the 3v3 voltage based output pins CANRx and CANTx of the MCP2515 as a logical 1.
-The full process of making this adjusment is found on this [link] (https://forums.raspberrypi.com/viewtopic.php?t=141052).
+The full process of making this adjusment and setting up the software support for the MCP2515 are found on this link. (https://forums.raspberrypi.com/viewtopic.php?t=141052).
 
 The code provided for the Raspberry Pi should be executed for it to keep listening to incoming frames on the CAN bus, with the capability to send its own through Domoticz.
 
@@ -25,7 +25,22 @@ Domoticz is a Home Automation System that lets you monitor and configure various
 Communications between the Raspberry Pi and Domoticz are made with MQTT.
 
 ## Architecture
-![alt text](architecture.png)
+![alt text](image.png)
 
 ## Wiring
+### MCP9808:
+Vdd <-> 3v3
+GND <-> GND
+SCL <-> B6
+SDA <-> B7
+A0,A1,A2 <-> GND (I2CADDR=0x18)
+### TSL2561:
+Vin <-> NC
+GND <-> GND
+3Vo <-> 3v3
+Addr <-> NC
+Int <-> NC
+SDA <-> B7
+SCL <-> B6
+
 ![alt text](wiring.png)
